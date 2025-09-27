@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@fastify/cors": "^11.1.0",
+    "@fastify/formbody": "^8.0.2",
     "@fastify/jwt": "^10.0.0"
   }
 }
