@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <h1>SPA Nativa 2</h1>
+    <button id="botonlistar">Listar los usuarios</button>
+    <button id="botoncrear">Crear un usuario</button>
+    <div id="Listado">
+
+      <h2>Listado de usuarios</h2>
+      <ul id="lista"></ul>
+    </div>
+
+    <div id="Crear" style="display: none">
+      <h2>Crear un usuario</h2>
+      <form id="formulariocrear">
+        <label for="nombre-crear">Nombre</label>
+        <input id="nombre-crear" name="nombre" /><br />
+        <br /><label for="apellido-crear">Apellido</label>
+        <input id="apellido-crear" name="apellido" /><br />
+        <br />
+        <button id="crearboton"type="submit">Guardar</button>
+      </form>
+    </div>
+
+    <div id="Modificar" style="display: none">
+      <h2>Modificar un usuario</h2>
+      <form id="formulariomodificar">
+        <input type="hidden" id="id-modificar" />
+        <label for="nombre-modificar">Nombre</label>
+        <input id="nombre-modificar" name="nombre" /><br />
+        <br /><label for="apellido-modificar">Apellido</label>
+        <input id="apellido-modificar" name="apellido" /><br />
+        <br />
+        <button type="submit" id="botoneditarguardar">
+          Guardar los cambios
+        </button>
+        <button type="button" id="botoncancelar">Cancelar</button>
+      </form>
+    </div>
+    <script type="module" src="index.js"></script>
+  </body>
+</html>
