@@ -159,3 +159,5 @@ botonRegister.addEventListener("click", () => {
 
 registerForm.addEventListener("submit", registrarUsuario);
 loginForm.addEventListener("submit", loginUsuario);
+
+const socket = new WebSocket("ws://localhost/4000")
