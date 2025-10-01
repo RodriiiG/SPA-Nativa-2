@@ -121,7 +121,7 @@ async function registrarUsuario(event) {
     const res = await register({ nombre, apellido, edad, password });
     registerForm.reset();
   } catch (err) {
-    console.error("Error register:", err);
+    console.error(err);
   }
     await listarUsuario()
 }
@@ -142,7 +142,7 @@ async function loginUsuario(event) {
     }
 
   } catch (err) {
-    console.error("authLogin falló (intentando fallback). Error:", err);
+    console.error(err);
     
   }
 }
