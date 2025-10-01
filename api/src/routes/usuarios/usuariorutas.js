@@ -1,5 +1,6 @@
-import { usuarios } from "../../../serverApi.js";
+
 import Type from "typebox";
+import { usuarios } from "../../services/usuariosservices.js";
 
 export default async function rutasUsuario(fastify, opts) {
   fastify.get(

@@ -12,6 +12,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@fastify/websocket": "^11.2.0",
     "fastify": "^5.6.1"
   },
   "devDependencies": {

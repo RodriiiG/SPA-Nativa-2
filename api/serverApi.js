@@ -3,13 +3,8 @@ import autoLoad from "@fastify/autoload";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import rutasUsuario from "./src/routes/usuarios/usuariorutas.js";
-import rutasLogin from "./src/login/auth.js";
+import rutasLogin from "./src/login/auth.js"
 
-export const usuarios = [
-  { nombre: "Rodrigo", apellido: "Godoy", edad: 19, id_usuario: 1 },
-  { nombre: "Gastón", apellido: "Baranov",edad: 27, id_usuario: 2 },  
-  { nombre: "Gabriel", apellido: "Fioritti",edad: 20, id_usuario: 3 },
-];
 
 const listenOptions = {
   host: "::",
@@ -26,11 +21,11 @@ const server = fastify({
 server.register(autoLoad, {
   dir: join(__dirname, "src", "plugins"),
 });
-/*
+
 server.register(autoLoad, {
   dir: join(__dirname, "src","routes"),
   routeParams: true,
-});*/
+});
 
 server.register(rutasUsuario)
 server.register(rutasLogin)
