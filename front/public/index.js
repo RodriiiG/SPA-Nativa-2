@@ -1,5 +1,5 @@
 import { getAll, erase, update, create } from "./services/usuariosService.js";
-
+import { register, login } from "./services/authService.js";
 const botonLista = document.getElementById("boton-listar");
 const botonCrear = document.getElementById("boton-crear");
 const listaDiv = document.getElementById("Listar");
@@ -7,6 +7,15 @@ const crearDiv = document.getElementById("Crear");
 const formularioCrear = document.getElementById("crear");
 const formularioEditar = document.getElementById("editar");
 const lista = document.getElementById("lista");
+
+const botonLogin = document.getElementById("boton-login");
+const botonRegister = document.getElementById("boton-register");
+const loginDiv = document.getElementById("Login");
+const registerDiv = document.getElementById("Register");
+const loginForm = document.getElementById("login");
+const registerForm = document.getElementById("register");
+
+let isAuthenticated = Boolean(localStorage.getItem("token"));
 
 async function listarUsuario() {
   const usuarios = await getAll();
@@ -100,3 +109,53 @@ formularioEditar.addEventListener("submit", guardarEdicionUsuario);
 
 const btnCancelarEdicion = document.getElementById("btn-cancelar-edicion");
 btnCancelarEdicion.addEventListener("click", cancelarEdicion);
+
+async function registrarUsuario(event) {
+  event.preventDefault();
+  const nombre = registerForm.elements["nombre"].value;
+  const apellido = registerForm.elements["apellido"].value;
+  const edad = registerForm.elements["edad"].value;
+  const password = registerForm.elements["password"].value 
+
+  try {
+    const res = await register({ nombre, apellido, edad, password });
+    registerForm.reset();
+  } catch (err) {
+    console.error("Error register:", err);
+  }
+    await listarUsuario()
+}
+
+
+async function loginUsuario(event) {
+  event.preventDefault();
+  const nombre = loginForm.elements["nombre"].value ;
+  const password = loginForm.elements["password"].value;
+  try {
+    await login({ nombre, password });
+    
+    const token = localStorage.getItem("token");
+    if (token) {
+      isAuthenticated = true;
+      loginForm.reset();
+      return;
+    }
+
+  } catch (err) {
+    console.error("authLogin falló (intentando fallback). Error:", err);
+    
+  }
+}
+
+
+botonLogin.addEventListener("click", () => {
+  loginDiv.style.display = loginDiv.style.display === "none" ? "block" : "none";
+});
+
+botonRegister.addEventListener("click", () => {
+  registerDiv.style.display = registerDiv.style.display === "none" ? "block" : "none";
+});
+
+
+registerForm.addEventListener("submit", registrarUsuario);
+loginForm.addEventListener("submit", loginUsuario);

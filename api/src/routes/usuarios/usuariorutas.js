@@ -1,5 +1,6 @@
 import { usuarios } from "../../../serverApi.js";
 import Type from "typebox";
+
 export default async function rutasUsuario(fastify, opts) {
   fastify.get(
     "/usuarios",
@@ -8,8 +9,10 @@ export default async function rutasUsuario(fastify, opts) {
         summary: "Obtener usuarios",
         description: "Ruta para obtener usuarios ",
         tags: ["usuarios"],
+        security: [{ bearerAuth: [] }],
       },
     },
+
     async (req, reply) => {
       return reply.code(200).send(usuarios);
     }
@@ -25,9 +28,11 @@ export default async function rutasUsuario(fastify, opts) {
         body: Type.Object({
           nombre: Type.String(),
           apellido: Type.String(),
-          edad: Type.Number()
-        })
+          edad: Type.Number(),
+        }),
+        security: [{ bearerAuth: [] }],
       },
+      preHandler: [fastify.authenticate],
     },
     async (req, reply) => {
       const maxId = usuarios.reduce(
@@ -43,59 +48,74 @@ export default async function rutasUsuario(fastify, opts) {
     }
   );
 
-  fastify.put("/usuarios/:id_usuario",{
-    schema: {
+  fastify.put(
+    "/usuarios/:id_usuario",
+    {
+      schema: {
         summary: "Modificar usuarios",
         description: "Ruta para modificar usuarios ",
         tags: ["usuarios"],
-                body: Type.Object({
+        body: Type.Object({
           nombre: Type.String(),
           apellido: Type.String(),
-          edad: Type.Number()
-        })
+          edad: Type.Number(),
+        }),
+        security: [{ bearerAuth: [] }],
       },
-  }, async (req, reply) => {
-    const id = Number(req.params.id_usuario);
-    const { nombre, apellido, edad } = req.body;
+      preHandler: [fastify.authenticate],
+    },
 
-    const usuarioCambiar = usuarios.find((u) => Number(u.id_usuario) === id);
-    if (!usuarioCambiar)
-      return reply.code(404).send({ error: "Usuario no encontrado" });
+    async (req, reply) => {
+      const id = Number(req.params.id_usuario);
+      const { nombre, apellido, edad } = req.body;
 
-    usuarioCambiar.nombre = nombre;
-    usuarioCambiar.apellido = apellido;
-    usuarioCambiar.edad = edad;
-    return reply.code(200).send(usuarioCambiar);
-  });
+      const usuarioCambiar = usuarios.find((u) => Number(u.id_usuario) === id);
+      if (!usuarioCambiar)
+        return reply.code(404).send({ error: "Usuario no encontrado" });
 
-  fastify.delete("/usuarios/:id_usuario", {
-    schema: {
+      usuarioCambiar.nombre = nombre;
+      usuarioCambiar.apellido = apellido;
+      usuarioCambiar.edad = edad;
+      return reply.code(200).send(usuarioCambiar);
+    }
+  );
+
+  fastify.delete(
+    "/usuarios/:id_usuario",
+    {
+      schema: {
         summary: "Eliminar usuarios",
         description: "Ruta para eliminar usuarios ",
         tags: ["usuarios"],
       },
-  },async (req, reply) => {
-    const id = Number(req.params.id_usuario);
-    const index = usuarios.findIndex((u) => Number(u.id_usuario) === id);
+    },
+    async (req, reply) => {
+      const id = Number(req.params.id_usuario);
+      const index = usuarios.findIndex((u) => Number(u.id_usuario) === id);
 
-    if (index === -1)
-      return reply.code(404).send({ error: "Usuario no encontrado" });
+      if (index === -1)
+        return reply.code(404).send({ error: "Usuario no encontrado" });
 
-    usuarios.splice(index, 1);
-    return reply.code(204).send();
-  });
+      usuarios.splice(index, 1);
+      return reply.code(204).send();
+    }
+  );
 
-  fastify.get("/usuarios/:id_usuario",{
-    schema: {
+  fastify.get(
+    "/usuarios/:id_usuario",
+    {
+      schema: {
         summary: "Obtener un usuario",
         description: "Ruta para obtener usuario ",
         tags: ["usuarios"],
       },
-  }, async (req, reply) => {
-    const id = Number(req.params.id_usuario);
-    const usuario = usuarios.find((u) => Number(u.id_usuario) === id);
-    if (!usuario)
-      return reply.code(404).send({ error: "Usuario no encontrado" });
-    return reply.code(200).send(usuario);
-  });
+    },
+    async (req, reply) => {
+      const id = Number(req.params.id_usuario);
+      const usuario = usuarios.find((u) => Number(u.id_usuario) === id);
+      if (!usuario)
+        return reply.code(404).send({ error: "Usuario no encontrado" });
+      return reply.code(200).send(usuario);
+    }
+  );
 }

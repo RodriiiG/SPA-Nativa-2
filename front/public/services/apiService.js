@@ -1,8 +1,22 @@
 const baseURL = "http://localhost:4000";
 
 export async function apiService(endpoint, options = {}) {
+  const token = localStorage.getItem("token");
+
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options.headers || {}),
+  };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   try {
-    const response = await fetch(`${baseURL}${endpoint}`, options);
+    const response = await fetch(`${baseURL}${endpoint}`, {
+  ...options,
+  headers, 
+});
 
     if (!response.ok) {
       handleError(response.status);

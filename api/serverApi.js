@@ -3,6 +3,7 @@ import autoLoad from "@fastify/autoload";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import rutasUsuario from "./src/routes/usuarios/usuariorutas.js";
+import rutasLogin from "./src/login/auth.js";
 
 export const usuarios = [
   { nombre: "Rodrigo", apellido: "Godoy", edad: 19, id_usuario: 1 },
@@ -32,7 +33,7 @@ server.register(autoLoad, {
 });*/
 
 server.register(rutasUsuario)
-
+server.register(rutasLogin)
 try {
   await server.listen(listenOptions);
 } catch (err) {
