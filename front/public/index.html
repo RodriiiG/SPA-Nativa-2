@@ -3,46 +3,54 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>SPA Nativa 2</title>
     <link rel="stylesheet" href="index.css" />
   </head>
   <body>
     <h1>SPA Nativa 2</h1>
-    <button id="botonlistar">Listar los usuarios</button>
-    <button id="botoncrear">Crear un usuario</button>
-    <div id="Listado">
 
-      <h2>Listado de usuarios</h2>
-      <ul id="lista"></ul>
+    <button id="boton-listar">Listar los usuarios</button>
+    <button id="boton-crear">Crear un usuario</button>
+
+    <div id="Listar" style="display: none">
+      <h3>Listado</h3>
+      <ul id="lista" class="lista"></ul>
     </div>
 
     <div id="Crear" style="display: none">
-      <h2>Crear un usuario</h2>
-      <form id="formulariocrear">
-        <label for="nombre-crear">Nombre</label>
-        <input id="nombre-crear" name="nombre" /><br />
-        <br /><label for="apellido-crear">Apellido</label>
-        <input id="apellido-crear" name="apellido" /><br />
+      <h3>Crear usuario</h3>
+      <form id="crear">
+        <label for="nombre">Nombre</label>
+        <input id="nombre" name="nombre" /><br />
+        <br /><label for="apellido">Apellido</label>
+        <input id="apellido" name="apellido" /><br />
         <br />
-        <button id="crearboton"type="submit">Guardar</button>
+        <label for="edad">Edad</label>
+        <input id="edad" name="edad" /><br />
+        <br />
+        <button type="submit">Guardar</button>
       </form>
     </div>
 
-    <div id="Modificar" style="display: none">
-      <h2>Modificar un usuario</h2>
-      <form id="formulariomodificar">
+    <div id="FormEditar" style="display: none">
+      <h3>Editar usuario</h3>
+      <form id="editar">
         <input type="hidden" id="id-modificar" />
-        <label for="nombre-modificar">Nombre</label>
-        <input id="nombre-modificar" name="nombre" /><br />
-        <br /><label for="apellido-modificar">Apellido</label>
-        <input id="apellido-modificar" name="apellido" /><br />
+
+        <label for="nuevoNombre-modificar">Nuevo nombre:</label>
+        <input type="text" id="nuevoNombre-modificar" /><br />
         <br />
-        <button type="submit" id="botoneditarguardar">
-          Guardar los cambios
-        </button>
-        <button type="button" id="botoncancelar">Cancelar</button>
+        <label for="nuevoApellido-modificar">Nuevo apellido:</label>
+        <input type="text" id="nuevoApellido-modificar" /><br />
+        <br />
+        <label for="nuevaEdad-modificar">Nueva edad:</label>
+        <input type="number" id="nuevaEdad-modificar" /><br />
+        <br />
+        <button type="submit" id="btn-guardar">Guardar cambios</button>
+        <button type="button" id="btn-cancelar-edicion">Cancelar</button>
       </form>
     </div>
+
     <script type="module" src="index.js"></script>
   </body>
 </html>

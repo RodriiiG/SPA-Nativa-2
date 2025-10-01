@@ -12,7 +12,7 @@ const listenOptions = {
     port: 3000
 }
 
-const rutaPublica = join(dirname(process.argv[1]), "")
+const rutaPublica = join(dirname(process.argv[1]), "public")
 
 server.register(fastifyStatic, {
     root: rutaPublica,

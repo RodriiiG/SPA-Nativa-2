@@ -1,26 +1,24 @@
-import { usuarios } from "../../api/serverApi.js";
-import { create, erase, getAll, update } from "../services/usuariosService.js";
+import { getAll, erase, update, create } from "./services/usuariosService.js";
 
-const listadoDiv = document.getElementById("Listado");
+const botonLista = document.getElementById("boton-listar");
+const botonCrear = document.getElementById("boton-crear");
+const listaDiv = document.getElementById("Listar");
 const crearDiv = document.getElementById("Crear");
-const modificarDiv = document.getElementById("Modificar");
-
-const listadoBoton = document.getElementById("botonlistar");
-const crearBoton = document.getElementById("crearboton");
-const modificarBoton = document.getElementById("botoneditarguardar");
-const cancelarBoton = document.getElementsById("botoncancelar");
+const formularioCrear = document.getElementById("crear");
+const formularioEditar = document.getElementById("editar");
 const lista = document.getElementById("lista");
 
 async function listarUsuario() {
   const usuarios = await getAll();
   lista.innerHTML = usuarios
     .map(
-      (u) => `<li>
-        ${u.nombre} ${u.apellido}
-        <button id="botonBorrarUsuario" data-id="${u.id_usuario}">
+      (u) => `
+      <li>
+        ${u.nombre} ${u.apellido} ${u.edad}
+        <button class="borrarUsuario" data-id="${u.id_usuario}">
           Eliminar usuario
         </button>
-        <button id="botonModificarUsuario" data-id="${u.id_usuario}" data-nombre="${u.nombre}" data-apellido="${u.apellido}">
+        <button class="editarUsuario" data-id="${u.id_usuario}" data-nombre="${u.nombre}" data-apellido="${u.apellido}" data-edad="${u.edad}">
           Modificar usuario
         </button>
       </li>`
@@ -28,63 +26,77 @@ async function listarUsuario() {
     .join("");
 }
 
-async function crearUsuario(event) {
-    event.preventDefault()
-    const formulario = document.getElementById("formulariocrear")
-    const nombre = formulario.elements["nombre-crear"].value
-    formulario.elements["nombre-crear"].value = ""
-    const apellido = formulario.elements["apellido-crear"].value
-    formulario.elements["apellido-crear"].value = ""
-    await create(nombre, apellido)
-    await listarUsuario()
+async function guardarUsuario(event) {
+  event.preventDefault();
+  const crear = formularioCrear; 
+  const nombre = crear.elements["nombre"].value;
+  const apellido = crear.elements["apellido"].value;
+  const edad = Number(crear.elements["edad"].value);
+  crear.reset();
+  await create({ nombre, apellido, edad });
+  await listarUsuario();
 }
 
-async function modificarUsuario(event) {
-    event.preventDefault()
-    const formulario = document.getElementById("formulariomodificar")
-    const nombre = formulario.elements["nombre-modificar"].value
-    const apellido = formulario.elements["apellido-modificar"].value
-    const idUsuario = formulario.elements["id-modificar"].value
-    await update(idUsuario, {nombre, apellido})
-    await listarUsuario()
+async function borrarUsuario(idUsuario) {
+  await erase(Number(idUsuario));
+  await listarUsuario();
 }
 
-async function borrarUsuario(id_usuario){
-    await erase(id_usuario)
-    await listarUsuario()
+function editarUsuario(idUsuario, nombre, apellido, edad) {
+  document.getElementById("FormEditar").style.display = "block";
+  document.getElementById("nuevoNombre-modificar").value = nombre;
+  document.getElementById("nuevoApellido-modificar").value = apellido;
+  document.getElementById("nuevaEdad-modificar").value = edad;
+  document.getElementById("id-modificar").value = idUsuario;
 }
 
-function cancelarCrear() {
-  document.getElementById("Crear").style.display = "none";
+function cancelarEdicion() {
+  document.getElementById("FormEditar").style.display = "none";
 }
 
-function cancelarModificar() {
-    document.getElementById("Modificar").style.play = "none";
+async function guardarEdicionUsuario(event) {
+  event.preventDefault();
+  const idUsuario = Number(document.getElementById("id-modificar").value);
+  const nuevonombre = document.getElementById("nuevoNombre-modificar").value.trim();
+  const nuevoapellido = document.getElementById("nuevoApellido-modificar").value.trim();
+  const nuevaedad = Number(document.getElementById("nuevaEdad-modificar").value) || null;
+
+  await update(idUsuario, {
+    nombre: nuevonombre,
+    apellido: nuevoapellido,
+    edad: nuevaedad,
+  });
+  cancelarEdicion();
+  await listarUsuario();
 }
 
-listadoBoton.addEventListener("click", () => {
-  listaUsuario();
-  if (listadoDiv.style.display === "none") {
-    listadoDiv.style.display = "block";
-  } else listadoDiv.style.display = "none";
+botonLista.addEventListener("click", async () => {
+  await listarUsuario();
+  listaDiv.style.display = listaDiv.style.display === "none" ? "block" : "none";
 });
 
-crearBoton.addEventListener("click", () => {
-  if (crearDiv.style.display === "none") {
-    crearDiv.style.display = "block";
-  } else crearDiv.style.display = "none";
+botonCrear.addEventListener("click", () => {
+  crearDiv.style.display = crearDiv.style.display === "none" ? "block" : "none";
 });
 
+lista.addEventListener("click", async (e) => {
+  const editarBtn = e.target.closest(".editarUsuario");
+  if (editarBtn) {
+    const { id, nombre, apellido, edad } = editarBtn.dataset;
+    return editarUsuario(id, nombre, apellido, edad);
+  }
 
-modificarBoton.addEventListener("click", () => {
-  if (modificarDiv.style.display === "none") {
-    modificarDiv.style.display = "block";
-  } else modificarDiv.style.display = "none";
+  const borrarBtn = e.target.closest(".borrarUsuario");
+  if (borrarBtn) {
+    const { id } = borrarBtn.dataset;
+    if (confirm("¿Eliminar usuario?")) {
+      await borrarUsuario(id);
+    }
+  }
 });
 
-const botonBorrarUsuario = document.getElementById("botonBorrarUsuario")
-const botonModificarUsuario = document.getElementById("botonModificarUsuario")
+formularioCrear.addEventListener("submit", guardarUsuario);
+formularioEditar.addEventListener("submit", guardarEdicionUsuario);
 
-botonBorrarUsuario.addEventListener("click", ()=>{
-    borrarUsuario()
-})
+const btnCancelarEdicion = document.getElementById("btn-cancelar-edicion");
+btnCancelarEdicion.addEventListener("click", cancelarEdicion);
