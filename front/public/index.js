@@ -161,3 +161,6 @@ registerForm.addEventListener("submit", registrarUsuario);
 loginForm.addEventListener("submit", loginUsuario);
 
 const socket = new WebSocket("ws://localhost/4000")
+socket.addEventListener("message", (event)=>{
+  console.log("Message from server: ", event)
+})
