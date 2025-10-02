@@ -1,8 +1,6 @@
 import Type from "typebox";
 import { usuarios } from "../services/usuariosservices.js";
 
-
-
 export default async function rutasLogin(fastify, opts) {
   fastify.post(
     "/register",
@@ -44,7 +42,7 @@ export default async function rutasLogin(fastify, opts) {
     }
   );
 
-    fastify.post(
+  fastify.post(
     "/login",
     {
       schema: {
@@ -77,4 +75,3 @@ export default async function rutasLogin(fastify, opts) {
     }
   );
 }
-
