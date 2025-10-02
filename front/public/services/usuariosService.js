@@ -31,7 +31,7 @@ export async function update(id_usuario, data) {
     body: JSON.stringify({
       nombre: data.nombre,
       apellido: data.apellido,
-      edad: data.edad
+      edad: data.edad,
     }),
   });
 }

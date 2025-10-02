@@ -4,7 +4,7 @@ import { usuarios } from "../../services/usuariosservices.js";
 
 export default async function rutasUsuario(fastify, opts) {
   fastify.get(
-    "/usuarios",
+    "/",
     {
       schema: {
         summary: "Obtener usuarios",
@@ -20,7 +20,7 @@ export default async function rutasUsuario(fastify, opts) {
   );
 
   fastify.post(
-    "/usuarios",
+    "/",
     {
       schema: {
         summary: "Crear usuarios",
@@ -50,7 +50,7 @@ export default async function rutasUsuario(fastify, opts) {
   );
 
   fastify.put(
-    "/usuarios/:id_usuario",
+    "/:id_usuario",
     {
       schema: {
         summary: "Modificar usuarios",
@@ -82,7 +82,7 @@ export default async function rutasUsuario(fastify, opts) {
   );
 
   fastify.delete(
-    "/usuarios/:id_usuario",
+    "/:id_usuario",
     {
       schema: {
         summary: "Eliminar usuarios",
@@ -103,7 +103,7 @@ export default async function rutasUsuario(fastify, opts) {
   );
 
   fastify.get(
-    "/usuarios/:id_usuario",
+    "/:id_usuario",
     {
       schema: {
         summary: "Obtener un usuario",

@@ -1,12 +1,20 @@
 const baseURL = "http://localhost:4000";
 
 export async function apiService(endpoint, options = {}) {
+  
   const token = localStorage.getItem("token");
+const method = (options.method || "GET").toUpperCase();
+  const headers = { ...(options.headers || {}) };
 
-  const headers = {
-    "Content-Type": "application/json",
-    ...(options.headers || {}),
-  };
+  // Añadir Content-Type solo si hay body y no viene ya
+  if (options.body && !headers["Content-Type"]) {
+    headers["Content-Type"] = "application/json";
+  }
+
+  // Evitar enviar Content-Type para GET/DELETE sin body
+  if (!options.body && (method==="GET"||method==="DELETE")) {
+    delete headers["Content-Type"];
+  }
 
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;

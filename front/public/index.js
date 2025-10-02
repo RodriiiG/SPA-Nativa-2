@@ -46,8 +46,8 @@ async function guardarUsuario(event) {
   await listarUsuario();
 }
 
-async function borrarUsuario(idUsuario) {
-  await erase(Number(idUsuario));
+async function borrarUsuario(id_usuario) {
+  await erase(id_usuario);
   await listarUsuario();
 }
 
@@ -160,7 +160,7 @@ botonRegister.addEventListener("click", () => {
 registerForm.addEventListener("submit", registrarUsuario);
 loginForm.addEventListener("submit", loginUsuario);
 
-const socket = new WebSocket("ws://localhost/4000")
+const socket = new WebSocket("ws://localhost:4000")
 socket.addEventListener("message", (event)=>{
-  console.log("Message from server: ", event)
+  console.log("Message from server: ", event.data)
 })

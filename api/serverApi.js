@@ -27,8 +27,12 @@ server.register(autoLoad, {
   routeParams: true,
 });
 
-server.register(rutasUsuario)
-server.register(rutasLogin)
+server.register(autoLoad, {
+  dir: join(__dirname, "src","login"),
+  routeParams: true,
+});
+
+
 try {
   await server.listen(listenOptions);
 } catch (err) {
