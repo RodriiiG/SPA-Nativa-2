@@ -1,89 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SPA Nativa 2</title>
-    <link rel="stylesheet" href="index.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>SPA Nativa 2 — Simplificada</title>
+    <link rel="stylesheet" href="index.css">
   </head>
   <body>
     <h1>SPA Nativa 2</h1>
 
-    <button id="boton-listar">Listar los usuarios</button>
-    <button id="boton-crear">Crear un usuario</button>
-    <button id="boton-login">Login</button>
-    <button id="boton-register">Registro</button>
-
-<div id="Login" style="display: none">
-      <h3>Login</h3>
-      <form id="login" action="/api/login" method="post" autocomplete="on">
-        <label for="login-nombre">Nombre</label>
-        <input id="login-nombre" name="nombre" required />
-
-        <label for="login-password">Password</label>
-        <input id="login-password" name="password" type="password" required />
-
-        <button type="submit">Entrar</button>
-      </form>
+    <div id="controls">
+      <button id="boton-listar">Listar usuarios</button>
+      <button id="boton-crear">Crear usuario</button>
+      <button id="boton-login">Login</button>
+      <button id="boton-register">Registro</button>
     </div>
 
-
-        <div id="Register" style="display: none">
-      <h3>Registro</h3>
-      <form id="register" action="/api/register" method="post" autocomplete="on">
-        <label for="reg-nombre">Nombre</label>
-        <input id="reg-nombre" name="nombre" required />
-
-        <label for="reg-apellido">Apellido</label>
-        <input id="reg-apellido" name="apellido" required />
-
-        <label for="reg-edad">Edad</label>
-        <input id="reg-edad" name="edad" type="number" min="0" max="130" />
-
-        <label for="reg-password">Password</label>
-        <input id="reg-password" name="password" type="password" required minlength="6" />
-
-        <button type="submit">Registrar</button>
-      </form>
-    </div>
-
-
-    <div id="Listar" style="display: none">
+    <div id="Listar" style="display:none;">
       <h3>Listado</h3>
-      <ul id="lista" class="lista"></ul>
+      <ul id="lista"></ul>
     </div>
 
-    <div id="Crear" style="display: none">
+    <div id="Crear" style="display:none;">
       <h3>Crear usuario</h3>
-      <form id="crear">
-        <label for="nombre">Nombre</label>
-        <input id="nombre" name="nombre" /><br />
-        <br /><label for="apellido">Apellido</label>
-        <input id="apellido" name="apellido" /><br />
-        <br />
-        <label for="edad">Edad</label>
-        <input id="edad" name="edad" /><br />
-        <br />
+      <form id="form-crear">
+        <label>Nombre <input name="nombre" required /></label><br /><br />
+        <label>Apellido <input name="apellido" /></label><br /><br />
+        <label>Edad <input name="edad" type="number" /></label><br /><br />
         <button type="submit">Guardar</button>
       </form>
     </div>
 
-    <div id="FormEditar" style="display: none">
-      <h3>Editar usuario</h3>
-      <form id="editar">
-        <input type="hidden" id="id-modificar" />
+    <div id="Modificar" style="display:none;">
+      <h3>Modificar usuario</h3>
+      <form id="form-modificar">
+        <input type="hidden" name="id" />
+        <label>Nombre <input name="nombre" required /></label><br /><br />
+        <label>Apellido <input name="apellido" /></label><br /><br />
+        <label>Edad <input name="edad" type="number" min="0" max="130" /></label><br /><br />
+        <button type="submit">Guardar cambios</button>
+        <button type="button" id="boton-cancelar">Cancelar</button>
+      </form>
+    </div>
 
-        <label for="nuevoNombre-modificar">Nuevo nombre:</label>
-        <input type="text" id="nuevoNombre-modificar" /><br />
-        <br />
-        <label for="nuevoApellido-modificar">Nuevo apellido:</label>
-        <input type="text" id="nuevoApellido-modificar" /><br />
-        <br />
-        <label for="nuevaEdad-modificar">Nueva edad:</label>
-        <input type="number" id="nuevaEdad-modificar" /><br />
-        <br />
-        <button type="submit" id="btn-guardar">Guardar cambios</button>
-        <button type="button" id="btn-cancelar-edicion">Cancelar</button>
+    <div id="Login" style="display:none;">
+      <h3>Login</h3>
+      <form id="form-login">
+        <label>Nombre <input name="nombre" required /></label><br /><br />
+        <label>Contraseña <input name="password" type="password" required /></label><br /><br />
+        <button type="submit">Entrar</button>
+      </form>
+    </div>
+
+    <div id="Register" style="display:none;">
+      <h3>Registro</h3>
+      <form id="form-register">
+        <label>Nombre <input name="nombre" required /></label><br /><br />
+        <label>Apellido <input name="apellido" /></label><br /><br />
+        <label>Edad <input name="edad" type="number" min="0" max="130" /></label><br /><br />
+        <label>Password <input name="password" type="password" minlength="6" required /></label><br /><br />
+        <button type="submit">Registrar</button>
       </form>
     </div>
 

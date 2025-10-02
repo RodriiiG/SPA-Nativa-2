@@ -1,9 +1,8 @@
 const baseURL = "http://localhost:4000";
 
 export async function apiService(endpoint, options = {}) {
-  
   const token = localStorage.getItem("token");
-const method = (options.method || "GET").toUpperCase();
+  const method = (options.method || "GET").toUpperCase();
   const headers = { ...(options.headers || {}) };
 
   // Añadir Content-Type solo si hay body y no viene ya
@@ -12,7 +11,7 @@ const method = (options.method || "GET").toUpperCase();
   }
 
   // Evitar enviar Content-Type para GET/DELETE sin body
-  if (!options.body && (method==="GET"||method==="DELETE")) {
+  if (!options.body && (method === "GET" || method === "DELETE")) {
     delete headers["Content-Type"];
   }
 
@@ -22,17 +21,16 @@ const method = (options.method || "GET").toUpperCase();
 
   try {
     const response = await fetch(`${baseURL}${endpoint}`, {
-  ...options,
-  headers, 
-});
+      ...options,
+      headers,
+    });
 
     if (!response.ok) {
       handleError(response.status);
-      
+
       throw new Error(`HTTP ${response.status}`);
     }
 
-    
     if (response.status === 204 || response.status === 205) return null;
 
     const contentType = response.headers.get("content-type") || "";

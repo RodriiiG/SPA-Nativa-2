@@ -1,166 +1,178 @@
 import { getAll, erase, update, create } from "./services/usuariosService.js";
 import { register, login } from "./services/authService.js";
+
+//Botones del HTML, Divs, listado
 const botonLista = document.getElementById("boton-listar");
 const botonCrear = document.getElementById("boton-crear");
-const listaDiv = document.getElementById("Listar");
-const crearDiv = document.getElementById("Crear");
-const formularioCrear = document.getElementById("crear");
-const formularioEditar = document.getElementById("editar");
-const lista = document.getElementById("lista");
-
 const botonLogin = document.getElementById("boton-login");
 const botonRegister = document.getElementById("boton-register");
-const loginDiv = document.getElementById("Login");
-const registerDiv = document.getElementById("Register");
-const loginForm = document.getElementById("login");
-const registerForm = document.getElementById("register");
+const botonCancelar = document.getElementById("boton-cancelar");
+
+const Divs = {
+  listar: document.getElementById("Listar"),
+  crear: document.getElementById("Crear"),
+  modificar: document.getElementById("Modificar"),
+  login: document.getElementById("Login"),
+  register: document.getElementById("Register"),
+};
+
+const listado = document.getElementById("lista");
+
+//Formularios
+
+const formCrear = document.getElementById("form-crear");
+const formModificar = document.getElementById("form-modificar");
+const formLogin = document.getElementById("form-login");
+const formRegister = document.getElementById("form-register");
+
 
 let isAuthenticated = Boolean(localStorage.getItem("token"));
 
-async function listarUsuario() {
-  const usuarios = await getAll();
-  lista.innerHTML = usuarios
-    .map(
-      (u) => `
-      <li>
-        ${u.nombre} ${u.apellido} ${u.edad}
-        <button class="borrarUsuario" data-id="${u.id_usuario}">
-          Eliminar usuario
-        </button>
-        <button class="editarUsuario" data-id="${u.id_usuario}" data-nombre="${u.nombre}" data-apellido="${u.apellido}" data-edad="${u.edad}">
-          Modificar usuario
-        </button>
+//Ocultar / mostrar los divs
+
+function ocultarDivs() {
+  Object.values(Divs).forEach((div) => (div.style.display = "none"));
+}
+function cambiarDivs(div) {
+  const d = Divs[div];
+  const divActual = d.style.display === "block";
+  ocultarDivs();
+  if (!divActual) d.style.display = "block";
+}
+
+//Motsrar la lista de usuarios
+
+async function mostrarListado() {
+  try {
+    const usuarios = await getAll();
+    listado.innerHTML = usuarios
+      .map(
+        (u) => `
+      <li data-id="${u.id_usuario}">
+        ${u.nombre} ${u.apellido } ${u.edad}
+        <button class="boton-modificar" data-id="${u.id_usuario}" data-nombre="${u.nombre}" data-apellido="${u.apellido}" data-edad="${u.edad}">Editar</button>
+        <button class="boton-borrar" data-id="${u.id_usuario}">Borrar</button>
       </li>`
-    )
-    .join("");
-}
-
-async function guardarUsuario(event) {
-  event.preventDefault();
-  const crear = formularioCrear; 
-  const nombre = crear.elements["nombre"].value;
-  const apellido = crear.elements["apellido"].value;
-  const edad = Number(crear.elements["edad"].value);
-  crear.reset();
-  await create({ nombre, apellido, edad });
-  await listarUsuario();
-}
-
-async function borrarUsuario(id_usuario) {
-  await erase(id_usuario);
-  await listarUsuario();
-}
-
-function editarUsuario(idUsuario, nombre, apellido, edad) {
-  document.getElementById("FormEditar").style.display = "block";
-  document.getElementById("nuevoNombre-modificar").value = nombre;
-  document.getElementById("nuevoApellido-modificar").value = apellido;
-  document.getElementById("nuevaEdad-modificar").value = edad;
-  document.getElementById("id-modificar").value = idUsuario;
-}
-
-function cancelarEdicion() {
-  document.getElementById("FormEditar").style.display = "none";
-}
-
-async function guardarEdicionUsuario(event) {
-  event.preventDefault();
-  const idUsuario = Number(document.getElementById("id-modificar").value);
-  const nuevonombre = document.getElementById("nuevoNombre-modificar").value.trim();
-  const nuevoapellido = document.getElementById("nuevoApellido-modificar").value.trim();
-  const nuevaedad = Number(document.getElementById("nuevaEdad-modificar").value) || null;
-
-  await update(idUsuario, {
-    nombre: nuevonombre,
-    apellido: nuevoapellido,
-    edad: nuevaedad,
-  });
-  cancelarEdicion();
-  await listarUsuario();
-}
-
-botonLista.addEventListener("click", async () => {
-  await listarUsuario();
-  listaDiv.style.display = listaDiv.style.display === "none" ? "block" : "none";
-});
-
-botonCrear.addEventListener("click", () => {
-  crearDiv.style.display = crearDiv.style.display === "none" ? "block" : "none";
-});
-
-lista.addEventListener("click", async (e) => {
-  const editarBtn = e.target.closest(".editarUsuario");
-  if (editarBtn) {
-    const { id, nombre, apellido, edad } = editarBtn.dataset;
-    return editarUsuario(id, nombre, apellido, edad);
+      )
+      .join("");
+  } catch (err) {
+    console.error("Error al listar:", err);
   }
+}
 
-  const borrarBtn = e.target.closest(".borrarUsuario");
-  if (borrarBtn) {
-    const { id } = borrarBtn.dataset;
+//Abrir el formulario de editar con los datos.
+
+function mostrarFormularioModificar(data) {
+  formModificar.elements["id"].value = data.id;
+  formModificar.elements["nombre"].value = data.nombre;
+  formModificar.elements["apellido"].value = data.apellido;
+  formModificar.elements["edad"].value = data.edad;
+  cambiarDivs("modificar");
+}
+
+// Listener de los botones
+botonLista.addEventListener("click", async () => {
+  await mostrarListado();
+  cambiarDivs("listar");
+});
+
+botonCrear.addEventListener("click", () => cambiarDivs("crear"));
+botonLogin.addEventListener("click", () => cambiarDivs("login"));
+botonRegister.addEventListener("click", () => cambiarDivs("register"));
+botonCancelar.addEventListener("click", () => cambiarDivs("modificar"));
+
+//Listener de los botones generados en la lista (Borrar y modificar)
+
+listado.addEventListener("click", async (e) => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+  const id = btn.dataset.id;
+  if (btn.classList.contains("boton-modificar")) {
+    mostrarFormularioModificar(btn.dataset);
+    return;
+  }
+  if (btn.classList.contains("boton-borrar")) {
     if (confirm("¿Eliminar usuario?")) {
-      await borrarUsuario(id);
+      try {
+        await erase(Number(id));
+        await mostrarListado();
+      } catch (err) {
+        console.error(err);
+      }
     }
   }
 });
 
-formularioCrear.addEventListener("submit", guardarUsuario);
-formularioEditar.addEventListener("submit", guardarEdicionUsuario);
+//Listener del formulario crear
 
-const btnCancelarEdicion = document.getElementById("btn-cancelar-edicion");
-btnCancelarEdicion.addEventListener("click", cancelarEdicion);
-
-async function registrarUsuario(event) {
+formCrear.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const nombre = registerForm.elements["nombre"].value;
-  const apellido = registerForm.elements["apellido"].value;
-  const edad = registerForm.elements["edad"].value;
-  const password = registerForm.elements["password"].value 
-
+  const nombre = formCrear.elements["nombre"].value;
+  const apellido = formCrear.elements["apellido"].value;
+  const edad = formCrear.elements["edad"].value ;
   try {
-    const res = await register({ nombre, apellido, edad, password });
-    registerForm.reset();
+    await create({ nombre, apellido, edad });
+    formCrear.reset();
+    await mostrarListado();
+    cambiarDivs("listar"); 
   } catch (err) {
     console.error(err);
   }
-    await listarUsuario()
-}
+});
 
+//Listener del formulario modificar
 
-async function loginUsuario(event) {
+formModificar.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const nombre = loginForm.elements["nombre"].value ;
-  const password = loginForm.elements["password"].value;
+  const id = Number(formModificar.elements["id"].value);
+  const nombre = formModificar.elements["nombre"].value;
+  const apellido = formModificar.elements["apellido"].value;
+  const edad = formModificar.elements["edad"].value;
+  try {
+    await update(id, { nombre, apellido, edad });
+    formModificar.reset();
+    await mostrarListado();
+    cambiarDivs("listar");
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+//Listener del formulario register
+
+formRegister.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const nombre = formRegister.elements["nombre"].value;
+  const apellido = formRegister.elements["apellido"].value;
+  const edad = formRegister.elements["edad"].value;
+  const password = formRegister.elements["password"].value;
+  try {
+    await register({ nombre, apellido, edad, password });
+    formRegister.reset();
+    await mostrarListado();
+    cambiarDivs("listar");
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+//Listener del formulario login
+
+formLogin.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const nombre = formLogin.elements["nombre"].value;
+  const password = formLogin.elements["password"].value;
   try {
     await login({ nombre, password });
-    
-    const token = localStorage.getItem("token");
-    if (token) {
-      isAuthenticated = true;
-      loginForm.reset();
-      return;
-    }
-
+    if (localStorage.getItem("token")) isAuthenticated = true;
+    formLogin.reset();
+    await mostrarListado();
+    toggleSection("listar");
   } catch (err) {
     console.error(err);
-    
   }
-}
-
-
-botonLogin.addEventListener("click", () => {
-  loginDiv.style.display = loginDiv.style.display === "none" ? "block" : "none";
 });
 
-botonRegister.addEventListener("click", () => {
-  registerDiv.style.display = registerDiv.style.display === "none" ? "block" : "none";
-});
-
-
-registerForm.addEventListener("submit", registrarUsuario);
-loginForm.addEventListener("submit", loginUsuario);
-
-const socket = new WebSocket("ws://localhost:4000")
-socket.addEventListener("message", (event)=>{
-  console.log("Message from server: ", event.data)
-})
+//Websocket, clase 01/10
+const socket = new WebSocket("ws://localhost:4000");
+socket.addEventListener("message", (ev) => console.log("WS:", ev.data));
