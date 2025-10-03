@@ -1,6 +1,6 @@
 import Type from "typebox";
 import type { FastifyInstance } from "fastify";
-import { Usuario } from "../../models/models.ts";
+import { ErrorSchema, Usuario } from "../../models/models.ts";
 import { getAll, create} from "../../services/usuariosservices.ts";
 
 
@@ -14,11 +14,16 @@ export default async function rutasUsuario(fastify: FastifyInstance, opts: objec
         tags: ["usuarios"],
         security: [{ bearerAuth: [] }],
         response:{
-          200: Type.Array(Usuario)
+          200: Type.Array(Usuario),
+          401: ErrorSchema
         }
       },
     },
     async (req, reply) => {
+        const token = req.cookies.token;
+  if (!token) {
+    return reply.status(401).send({ error: "No autorizado" });
+  }
       return reply.code(200).send(await getAll());
     }
   );

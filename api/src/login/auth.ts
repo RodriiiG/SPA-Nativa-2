@@ -44,8 +44,8 @@ export default async function rutasLogin(
         body: UsuarioLogin,
         response: {
           200: Type.Object({
-            token: Type.String()
-        }),
+            token: Type.String(),
+          }),
           401: ErrorSchema,
         },
       },
@@ -61,9 +61,16 @@ export default async function rutasLogin(
       };
 
       const token = fastify.jwt.sign(
-        { id: usuario.id_usuario, nombre: usuario.nombre, rol: usuario.rol  },
+        { id: usuario.id_usuario, nombre: usuario.nombre, rol: usuario.rol },
         signOptions
       );
+
+      reply.setCookie("token", token, {
+        path: "/",
+        httpOnly: true,
+        secure: false,
+        maxAge: 60 * 60,
+      });
       return reply.code(200).send({ token });
     }
   );
