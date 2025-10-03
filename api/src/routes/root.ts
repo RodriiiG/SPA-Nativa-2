@@ -1,6 +1,6 @@
-import websocket from "../plugins/websocket.js";
-
-export default async function root(fastify, opts) {
+import websocket from "../plugins/websocket.ts";
+import type { FastifyInstance } from "fastify";
+export default async function root(fastify: FastifyInstance, opts: Object) {
   fastify.route({
     method: "GET",
     url: "/",
@@ -9,7 +9,6 @@ export default async function root(fastify, opts) {
     },
     wsHandler: (socket, req) => {
       socket.send("aejfbieai");
-      
     },
   });
 }

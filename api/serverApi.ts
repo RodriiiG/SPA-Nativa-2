@@ -2,20 +2,29 @@ import fastify from "fastify";
 import autoLoad from "@fastify/autoload";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import rutasUsuario from "./src/routes/usuarios/usuariorutas.js";
-import rutasLogin from "./src/login/auth.js"
+import type { FastifyListenOptions, FastifyInstance } from "fastify";
 
-
-const listenOptions = {
+const listenOptions : FastifyListenOptions= {
   host: "::",
   port: 4000,
 };
 
+const loggerOptions = {
+  level: process.env.FASTIFY_LOG_LEVEL || "trace",
+  transport: {
+    target: "pino-pretty",
+    options: {
+      colorize: true,
+      translateTime: "SYS:standard",
+      ignore: "pid,hostname",
+    },
+  },
+}
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const server = fastify({
-  logger: true,
+const server : FastifyInstance = fastify({
+  logger: loggerOptions,
 });
 
 server.register(autoLoad, {

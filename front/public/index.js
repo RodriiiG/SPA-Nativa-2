@@ -49,7 +49,7 @@ async function mostrarListado() {
       .map(
         (u) => `
       <li data-id="${u.id_usuario}">
-        ${u.nombre} ${u.apellido } ${u.edad}
+        ID: ${u.id_usuario} NOMBRE: ${u.nombre} APELLIDO: ${u.apellido } EDAD: ${u.edad} ROL: ${u.rol}
         <button class="boton-modificar" data-id="${u.id_usuario}" data-nombre="${u.nombre}" data-apellido="${u.apellido}" data-edad="${u.edad}">Editar</button>
         <button class="boton-borrar" data-id="${u.id_usuario}">Borrar</button>
       </li>`
@@ -67,6 +67,8 @@ function mostrarFormularioModificar(data) {
   formModificar.elements["nombre"].value = data.nombre;
   formModificar.elements["apellido"].value = data.apellido;
   formModificar.elements["edad"].value = data.edad;
+  formModificar.elements["rol"].value = data.rol;
+  formModificar.elements["password"].value = data.password;
   cambiarDivs("modificar");
 }
 
@@ -110,8 +112,10 @@ formCrear.addEventListener("submit", async (event) => {
   const nombre = formCrear.elements["nombre"].value;
   const apellido = formCrear.elements["apellido"].value;
   const edad = formCrear.elements["edad"].value ;
+  const rol = formCrear.elements["rol"].value;
+  const password = formCrear.elements["password"].value
   try {
-    await create({ nombre, apellido, edad });
+    await create({ nombre, apellido, edad, rol, password });
     formCrear.reset();
     await mostrarListado();
     cambiarDivs("listar"); 
@@ -128,8 +132,10 @@ formModificar.addEventListener("submit", async (event) => {
   const nombre = formModificar.elements["nombre"].value;
   const apellido = formModificar.elements["apellido"].value;
   const edad = formModificar.elements["edad"].value;
+  const rol = formModificar.elements["rol"].value;
+  const password = formModificar.elements["password"].value;
   try {
-    await update(id, { nombre, apellido, edad });
+    await update(id, { nombre, apellido, edad, rol, password });
     formModificar.reset();
     await mostrarListado();
     cambiarDivs("listar");
@@ -144,9 +150,11 @@ formRegister.addEventListener("submit", async (event) => {
   event.preventDefault();
   const nombre = formRegister.elements["nombre"].value;
   const apellido = formRegister.elements["apellido"].value;
-  const edad = formRegister.elements["edad"].value;
+  const edad = Number(formRegister.elements["edad"].value);
   const password = formRegister.elements["password"].value;
+
   try {
+    console.log({ nombre, apellido, edad, password })
     await register({ nombre, apellido, edad, password });
     formRegister.reset();
     await mostrarListado();
@@ -167,7 +175,7 @@ formLogin.addEventListener("submit", async (event) => {
     if (localStorage.getItem("token")) isAuthenticated = true;
     formLogin.reset();
     await mostrarListado();
-    toggleSection("listar");
+    cambiarDivs("listar");
   } catch (err) {
     console.error(err);
   }

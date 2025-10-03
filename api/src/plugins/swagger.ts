@@ -27,10 +27,11 @@ export default fp<FastifySwaggerOptions>(async (fastify) => {
           description: 'Development server'
         }
       ],
+      /*
       tags: [
         { name: 'root', description: 'Root end points.' },
         { name: 'examples', description: 'Examples end points.' },
-      ],
+      ],*/
       components: {
         securitySchemes: {
           bearerAuth: {

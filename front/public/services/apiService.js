@@ -31,7 +31,7 @@ export async function apiService(endpoint, options = {}) {
       throw new Error(`HTTP ${response.status}`);
     }
 
-    if (response.status === 204 || response.status === 205) return null;
+    if (response.status === 204) return null;
 
     const contentType = response.headers.get("content-type") || "";
     if (contentType.includes("application/json")) {

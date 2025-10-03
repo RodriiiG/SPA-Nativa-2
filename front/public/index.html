@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>SPA Nativa 2 — Simplificada</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="index.css" />
   </head>
   <body>
     <h1>SPA Nativa 2</h1>
@@ -16,49 +16,74 @@
       <button id="boton-register">Registro</button>
     </div>
 
-    <div id="Listar" style="display:none;">
+    <div id="Listar" style="display: none">
       <h3>Listado</h3>
       <ul id="lista"></ul>
     </div>
 
-    <div id="Crear" style="display:none;">
+    <div id="Crear" style="display: none">
       <h3>Crear usuario</h3>
       <form id="form-crear">
         <label>Nombre <input name="nombre" required /></label><br /><br />
         <label>Apellido <input name="apellido" /></label><br /><br />
         <label>Edad <input name="edad" type="number" /></label><br /><br />
+        <label>
+          Rol
+          <select name="rol" required>
+            <option value="admin">Admin</option>
+            <option value="usuario">Usuario</option>
+          </select>
+        </label>
+        <br /><br />
+        <label>Contraseña <input name="password"/></label
+        ><br /><br />
         <button type="submit">Guardar</button>
       </form>
     </div>
 
-    <div id="Modificar" style="display:none;">
+    <div id="Modificar" style="display: none">
       <h3>Modificar usuario</h3>
       <form id="form-modificar">
         <input type="hidden" name="id" />
         <label>Nombre <input name="nombre" required /></label><br /><br />
         <label>Apellido <input name="apellido" /></label><br /><br />
-        <label>Edad <input name="edad" type="number" min="0" max="130" /></label><br /><br />
+        <label>Edad <input name="edad" type="number" min="0" max="130" /></label
+        ><br /><br />
+                <label>
+          Rol
+          <select name="rol" required>
+            <option value="admin">Admin</option>
+            <option value="usuario">Usuario</option>
+          </select>
+        </label>
+        <br /><br />
+        <label>Contraseña <input name="password"/></label
+        ><br /><br />
         <button type="submit">Guardar cambios</button>
         <button type="button" id="boton-cancelar">Cancelar</button>
       </form>
     </div>
 
-    <div id="Login" style="display:none;">
+    <div id="Login" style="display: none">
       <h3>Login</h3>
       <form id="form-login">
         <label>Nombre <input name="nombre" required /></label><br /><br />
-        <label>Contraseña <input name="password" type="password" required /></label><br /><br />
+        <label
+          >Contraseña <input name="password" type="password" required /></label
+        ><br /><br />
         <button type="submit">Entrar</button>
       </form>
     </div>
 
-    <div id="Register" style="display:none;">
+    <div id="Register" style="display: none">
       <h3>Registro</h3>
       <form id="form-register">
         <label>Nombre <input name="nombre" required /></label><br /><br />
-        <label>Apellido <input name="apellido" /></label><br /><br />
-        <label>Edad <input name="edad" type="number" min="0" max="130" /></label><br /><br />
-        <label>Password <input name="password" type="password" minlength="6" required /></label><br /><br />
+        <label>Apellido <input name="apellido"  required/></label><br /><br />
+        <label>Edad <input name="edad" type="number"  required/></label
+        ><br /><br />
+        <label>Contraseña <input name="password"/></label
+        ><br /><br />
         <button type="submit">Registrar</button>
       </form>
     </div>

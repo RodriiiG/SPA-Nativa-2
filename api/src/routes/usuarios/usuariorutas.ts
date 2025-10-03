@@ -1,0 +1,45 @@
+import Type from "typebox";
+import type { FastifyInstance } from "fastify";
+import { Usuario } from "../../models/models.ts";
+import { getAll, create} from "../../services/usuariosservices.ts";
+
+
+export default async function rutasUsuario(fastify: FastifyInstance, opts: object) {
+  fastify.get(
+    "/",
+    {
+      schema: {
+        summary: "Obtener usuarios",
+        description: "Ruta para obtener usuarios ",
+        tags: ["usuarios"],
+        security: [{ bearerAuth: [] }],
+        response:{
+          200: Type.Array(Usuario)
+        }
+      },
+    },
+    async (req, reply) => {
+      return reply.code(200).send(await getAll());
+    }
+  );
+
+  fastify.post(
+    "/",
+    {
+      schema: {
+        summary: "Crear usuarios",
+        description: "Ruta para crear usuarios ",
+        tags: ["usuarios"],
+        body: Type.Omit(Usuario, ["id_usuario"]),
+        security: [{ bearerAuth: [] }],
+        response: {
+          201: Usuario
+        }
+      },
+      preHandler: [fastify.authenticate],
+    },
+    async (req, reply) => {
+      return reply.code(201).send(await create(req.body as Usuario));
+    }
+  );
+}

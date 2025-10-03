@@ -12,6 +12,14 @@ export async function create(usuario) {
   });
 }
 
+export async function createRegister(usuario) {
+  return await apiService("/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(usuario),
+  });
+}
+
 export async function erase(id_usuario) {
   return await apiService(`/usuarios/${id_usuario}`, {
     method: "DELETE",
@@ -32,6 +40,8 @@ export async function update(id_usuario, data) {
       nombre: data.nombre,
       apellido: data.apellido,
       edad: data.edad,
+      rol: data.rol,
+      password: data.password
     }),
   });
 }
