@@ -36,7 +36,9 @@ export default async function rutasUsuario(fastify: FastifyInstance, opts: objec
           201: Usuario
         }
       },
-      preHandler: [fastify.authenticate],
+      onRequest: fastify.authenticate, 
+      preHandler: fastify.isAdmin,
+
     },
     async (req, reply) => {
       return reply.code(201).send(await create(req.body as Usuario));

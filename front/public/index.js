@@ -49,7 +49,7 @@ async function mostrarListado() {
       .map(
         (u) => `
       <li data-id="${u.id_usuario}">
-        ID: ${u.id_usuario} NOMBRE: ${u.nombre} APELLIDO: ${u.apellido } EDAD: ${u.edad} ROL: ${u.rol}
+        ID:  ${u.id_usuario} NOMBRE:  ${u.nombre} APELLIDO:  ${u.apellido } EDAD:  ${u.edad} ROL:  ${u.rol}
         <button class="boton-modificar" data-id="${u.id_usuario}" data-nombre="${u.nombre}" data-apellido="${u.apellido}" data-edad="${u.edad}">Editar</button>
         <button class="boton-borrar" data-id="${u.id_usuario}">Borrar</button>
       </li>`

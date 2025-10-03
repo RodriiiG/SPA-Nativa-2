@@ -61,7 +61,7 @@ export default async function rutasLogin(
       };
 
       const token = fastify.jwt.sign(
-        { id: usuario.id_usuario, nombre: usuario.nombre },
+        { id: usuario.id_usuario, nombre: usuario.nombre, rol: usuario.rol  },
         signOptions
       );
       return reply.code(200).send({ token });

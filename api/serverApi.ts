@@ -27,16 +27,20 @@ const server : FastifyInstance = fastify({
   logger: loggerOptions,
 });
 
-server.register(autoLoad, {
+await server.register(autoLoad, {
+  dir: join(__dirname, "src", "decorators"),
+});
+
+await server.register(autoLoad, {
   dir: join(__dirname, "src", "plugins"),
 });
 
-server.register(autoLoad, {
+await server.register(autoLoad, {
   dir: join(__dirname, "src","routes"),
   routeParams: true,
 });
 
-server.register(autoLoad, {
+await server.register(autoLoad, {
   dir: join(__dirname, "src","login"),
   routeParams: true,
 });

@@ -26,7 +26,8 @@ export default async function rutasUsuario(
         },
         security: [{ bearerAuth: [] }],
       },
-      preHandler: [fastify.authenticate],
+      onRequest: fastify.authenticate,
+      preHandler: fastify.isAdmin
     },
 
     async (req, reply) => {
@@ -48,7 +49,9 @@ export default async function rutasUsuario(
         response: {
           204: Type.Null(),
         },
+        security: [{ bearerAuth: [] }],
       },
+      onRequest: fastify.authenticate
     },
     async (req, reply) => {
       const { id_usuario } = req.params as { id_usuario: number };
