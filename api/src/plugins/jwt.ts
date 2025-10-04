@@ -1,8 +1,7 @@
 import jwt from "@fastify/jwt";
-import type {FastifyJwtNamespace, FastifyJWTOptions} from "@fastify/jwt"
-import type { FastifyReply, FastifyRequest } from "fastify";
+import type {FastifyJWTOptions} from "@fastify/jwt"
 import fastifyPlugin from "fastify-plugin";
-import { Usuario, Rol } from "../models/models.ts";
+
 
 export default fastifyPlugin(async function jwtPlugin(fastify) {
   const secret = process.env.JWT_SECRET || "secreto";

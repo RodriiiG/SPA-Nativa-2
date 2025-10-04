@@ -5,12 +5,10 @@ export async function apiService(endpoint, options = {}) {
   const method = (options.method || "GET").toUpperCase();
   const headers = { ...(options.headers || {}) };
 
-  // Añadir Content-Type solo si hay body y no viene ya
   if (options.body && !headers["Content-Type"]) {
     headers["Content-Type"] = "application/json";
   }
 
-  // Evitar enviar Content-Type para GET/DELETE sin body
   if (!options.body && (method === "GET" || method === "DELETE")) {
     delete headers["Content-Type"];
   }
